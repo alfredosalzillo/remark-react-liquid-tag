@@ -4,11 +4,14 @@ import { toString } from 'mdast-util-to-string';
 import { type Node } from 'unist';
 import React from 'react';
 
-export type RemarkReactLiquidTagProps<Options extends Record<string, string> = never> = {
-  type: string;
-  url: string;
-  options: Options;
-};
+export type RemarkReactLiquidTagProps<
+  Options extends Record<string, string> = never,
+  Config = unknown> = {
+    type: string;
+    url: string;
+    options: Options;
+    config?: Config;
+  };
 
 export type RemarkReactLiquidTagConfig<Props> = Props extends {
   type: infer Type extends string,
