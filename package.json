@@ -38,10 +38,10 @@
   },
   "homepage": "https://github.com/alfredosalzillo/remark-react-liquid-tag#readme",
   "dependencies": {
-    "hast": "^1.0.0",
     "mdast-util-to-string": "^4.0.0",
     "react": ">=18",
     "unified": "^11.0.5",
+    "unist": "^0.0.1",
     "unist-util-map": "^4.0.0"
   },
   "devDependencies": {
@@ -52,7 +52,6 @@
     "@swc/cli": "0.6.0",
     "@swc/core": "1.11.9",
     "@swc/jest": "0.2.37",
-    "@types/hast": "^3.0.4",
     "@types/jest": "29.5.14",
     "@types/react": "^19.0.10",
     "@typescript-eslint/eslint-plugin": "5.56.0",

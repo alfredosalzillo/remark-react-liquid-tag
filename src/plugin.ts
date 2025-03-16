@@ -1,7 +1,7 @@
 import { Plugin } from 'unified';
 import { map } from 'unist-util-map';
 import { toString } from 'mdast-util-to-string';
-import { Root } from 'hast';
+import { type Node } from 'unist';
 import React from 'react';
 
 export type RemarkReactLiquidTagProps<Options extends Record<string, string> = never> = {
@@ -23,9 +23,9 @@ export type RemarkReactLiquidTagOptions<Props> = {
 };
 const remarkReactLiquidTag = <
   Props = any,
->(options: RemarkReactLiquidTagOptions<Props>): Plugin<[Root]> => {
+>(options: RemarkReactLiquidTagOptions<Props>): Plugin<[Node]> => {
   const { component, config } = options;
-  return (tree: Root) => map(tree, (node: any) => {
+  return (tree) => map(tree, (node: any) => {
     if (!component) {
       return node;
     }
