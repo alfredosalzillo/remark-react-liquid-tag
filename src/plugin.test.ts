@@ -97,9 +97,7 @@ describe('remark-react-liquid-tag', () => {
       .processSync(dedent`
         # Hello World
         This is an example markdown file.
-        
         {% link https://example.com text=Example %}
-        
         {% image https://example.com/image.jpg alt=Image %}
       `);
     renderToString(result);

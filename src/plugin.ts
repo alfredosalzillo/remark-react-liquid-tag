@@ -4,6 +4,45 @@ import { toString } from 'mdast-util-to-string';
 import { type Node } from 'unist';
 import React from 'react';
 
+const liquidTagRegex = /(\{%[^%]*%})/g;
+
+type LiquidTagAstTextNode = {
+  type: 'text';
+  value: string;
+};
+type LiquidTagAstTagNode = {
+  type: 'tag';
+  value: {
+    type: string;
+    url: string;
+    options: Record<string, string>;
+  };
+};
+const toLiquidTagAstTagNode = (text: string): LiquidTagAstTagNode => {
+  const [type, url, ...tagOptions] = text.replace(/^\{% *| *%}$/g, ' ').trim().split(/ +/);
+  return {
+    type: 'tag',
+    value: {
+      type,
+      url,
+      options: Object.fromEntries(tagOptions.map((option) => option.split('='))) as Record<string, string>,
+    },
+  };
+};
+const parseLiquidTagAst = (
+  text: string,
+): Array<LiquidTagAstTextNode | LiquidTagAstTagNode> => text
+  .split(liquidTagRegex)
+  .map((part) => {
+    if (liquidTagRegex.test(part)) {
+      return toLiquidTagAstTagNode(part);
+    }
+    return {
+      type: 'text',
+      value: part,
+    };
+  });
+
 export type RemarkReactLiquidTagProps<
   Options extends Record<string, string> = never,
   Config = unknown> = {
@@ -36,32 +75,29 @@ const remarkReactLiquidTag = <
       return node;
     }
     const text = toString(node);
-    const matches = text.match(/\{%.*%}/g);
-    if (matches) {
-      const [prev, next] = text.split(matches[0]);
-      const [type, url, ...tagOptions] = matches[0]
-        .trim()
-        .replace('{%', '')
-        .replace('%}', '')
-        .trim()
-        .split(/ +/);
-      return {
-        type: 'element',
-        value: React.createElement(React.Fragment, null, [
-          prev,
-          // @ts-ignore
-          React.createElement(component, {
-            key: 'tag',
-            type,
-            url,
-            options: Object.fromEntries(tagOptions.map((option) => option.split('='))),
-            config: config?.[type],
-          }),
-          next,
-        ]),
-      };
+    if (!liquidTagRegex.test(text)) {
+      return node;
     }
-    return node;
+    return {
+      type: 'element',
+      value: React.createElement(
+        React.Fragment,
+        null,
+        parseLiquidTagAst(text).map((part, index) => {
+          if (part.type === 'text') {
+            return part.value;
+          }
+          // @ts-ignore
+          return React.createElement(component, {
+            key: index,
+            type: part.value.type,
+            url: part.value.url,
+            options: part.value.options,
+            config: config?.[part.value.type],
+          });
+        }),
+      ),
+    };
   });
 };
 
