@@ -29,7 +29,8 @@
     "remark",
     "react",
     "liquig-tag",
-    "dev-to"
+    "dev-to",
+    "remark-plugin"
   ],
   "author": "Alfredo Salzillo",
   "license": "ISC",
