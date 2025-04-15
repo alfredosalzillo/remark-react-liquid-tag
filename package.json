@@ -1,6 +1,6 @@
 {
   "name": "remark-react-liquid-tag",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "remark react plugin for liquid tag support",
   "type": "module",
   "main": "./dist/plugin.cjs",

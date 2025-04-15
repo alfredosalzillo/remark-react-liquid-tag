@@ -1,7 +1,6 @@
-import { Plugin } from 'unified';
+import { Transformer } from 'unified';
 import { map } from 'unist-util-map';
 import { toString } from 'mdast-util-to-string';
-import { type Node } from 'unist';
 import React from 'react';
 
 const liquidTagRegex = /(\{%[^%]*%})/g;
@@ -65,7 +64,7 @@ export type RemarkReactLiquidTagOptions<Props> = {
 };
 const remarkReactLiquidTag = <
   Props = any,
->(options: RemarkReactLiquidTagOptions<Props>): Plugin<[Node]> => {
+>(options: RemarkReactLiquidTagOptions<Props>): Transformer => {
   const { component, config } = options;
   return (tree) => map(tree, (node: any) => {
     if (!component) {
